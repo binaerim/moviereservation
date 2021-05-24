@@ -15,25 +15,34 @@ public class Seat {
     private Long reservationId;
     private Long seatQty;
 
-    @PostUpdate
-    public void onPostUpdate(){
+    @PrePersist void onPrePersist() {
         SeatAssigned seatAssigned = new SeatAssigned();
         BeanUtils.copyProperties(this, seatAssigned);
         seatAssigned.publishAfterCommit();
+    }
 
-
-        SeatCancelled seatCancelled = new SeatCancelled();
-        BeanUtils.copyProperties(this, seatCancelled);
-        seatCancelled.publishAfterCommit();
+    @PostUpdate
+    public void onPostUpdate(){
+        //SeatAssigned seatAssigned = new SeatAssigned();
+        //BeanUtils.copyProperties(this, seatAssigned);
+        //seatAssigned.publishAfterCommit();
 
         //Following code causes dependency to external APIs
         // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
 
         moviereservation.external.Ticket ticket = new moviereservation.external.Ticket();
         // mappings goes here
-        Application.applicationContext.getBean(moviereservation.external.TicketService.class)
-            .cancelTicket(ticket);
+        // modified by jungilkim (Added Code)
+        ticket.setReservationId(this.getReservationId());
+        ticket.setTicketStatus("CancellSeat");
 
+        // modified by jungilkim (Application -> SeatmanagementApplication)
+        SeatmanagementApplication.applicationContext.getBean(moviereservation.external.TicketService.class)
+            .cancelTicket(this.getReservationId(), "CancellSeat");
+
+        SeatCancelled seatCancelled = new SeatCancelled();
+        BeanUtils.copyProperties(this, seatCancelled);
+        seatCancelled.publishAfterCommit();
 
     }
 
@@ -59,8 +68,4 @@ public class Seat {
     public void setSeatQty(Long seatQty) {
         this.seatQty = seatQty;
     }
-
-
-
-
 }
