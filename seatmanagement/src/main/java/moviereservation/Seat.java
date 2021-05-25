@@ -39,7 +39,7 @@ public class Seat {
 
         // modified by jungilkim (Application -> SeatmanagementApplication)
         SeatmanagementApplication.applicationContext.getBean(moviereservation.external.TicketService.class)
-            .cancelTicket(this.getReservationId(), "CancellSeat");
+            .cancelTicket(ticket);
 
         SeatCancelled seatCancelled = new SeatCancelled();
         BeanUtils.copyProperties(this, seatCancelled);
