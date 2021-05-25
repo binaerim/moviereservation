@@ -276,7 +276,8 @@ source build, dockering에서 필요한 경로를 아래와 같이 개별 프로
 
 - Hystrix 를 설정:  요청처리 쓰레드에서 1초 미만, 요청 실패율이 10ㅃ% 를 넘어갈 경우 CB 작동하여 접속자가 많다는 메세지 발송
 ```
-# (Reservation)Reservation.java
+### (Reservation)Reservation.java
+
 
    @HystrixCommand(fallbackMethod = "reservationFallback",
             commandProperties = {
@@ -287,9 +288,10 @@ source build, dockering에서 필요한 경로를 아래와 같이 개별 프로
 ```
 
 - 결제 서비스에 부하를 주지 않도록, 결제 서비스의 응답이 정상적이지 않을 경우 아래 Fallback 함수 작동
-```
-# ((Reservation)Reservation.java
+- application.yml 에 설정하는 방법도 있지만,  property 가 많지 않아 설정
+- Command Key 의 경우 Default 함수인 onPostPersist 에서 Count
 
+```
     
     public String reservationFallback(){
         return "접속자가 많아 기다리셔야 합니다";
