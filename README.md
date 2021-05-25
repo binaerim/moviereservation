@@ -243,7 +243,7 @@ k8s에 티켓관리 deploy
 http http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/tickets     # 기예매된 서비스가 저장되는지 
 ```
 
-
+```
 # 운영
 
 ## CI/CD 설정
@@ -275,6 +275,7 @@ source build, dockering에서 필요한 경로를 아래와 같이 개별 프로
 시나리오는 예약(Reservation)-->결제(pay) 시의 연결을 RESTful Request/Response 로 연동하여 구현이 되어있고, 결제 요청이 과도할 경우 CB 를 통하여 장애격리.
 
 - Hystrix 를 설정:  요청처리 쓰레드에서 1초 미만, 요청 실패율이 10ㅃ% 를 넘어갈 경우 CB 작동하여 접속자가 많다는 메세지 발송
+
 ```
 ### (Reservation)Reservation.java
 
@@ -287,6 +288,7 @@ source build, dockering에서 필요한 경로를 아래와 같이 개별 프로
                     @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10")
                     
             })
+
 
 
 ```
