@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name="ticketmanagement", url="http://ticketmanagement:8080")
 public interface TicketService {
 
-    @RequestMapping(method= RequestMethod.POST, path="/cancelTicket")
-    // modified by jungilkim
-    public void cancelTicket(@RequestParam("reservationId") Long reservationId, @RequestParam("ticketStatus") String ticketStatus);
+    @RequestMapping(method = RequestMethod.POST, path = "/cancelTicket")
+    public void cancelTicket(@RequestBody Ticket ticket);
 }
