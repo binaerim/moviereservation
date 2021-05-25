@@ -107,36 +107,44 @@ CMD ["python", "policy-handler.py"]
 
 ## 동기식 호출 과 Fallback 처리
 
-분석단계에서의 조건 중 하나로 주문(app)->결제(pay) 간의 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다. 호출 프로토콜은 이미 앞서 Rest Repository 에 의해 노출되어있는 REST 서비스를 FeignClient 를 이용하여 호출하도록 한다. 
+분석단계에서의 조건 중 하나로 좌석이 선택되지 않은 예약건은 아예 거래가 성립되지 않아야 한다. 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다. 
+호출 프로토콜은 이미 앞서 Rest Repository 에 의해 노출되어있는 REST 서비스를 FeignClient 를 이용하여 호출하도록 한다. 
 
 - 결제서비스를 호출하기 위하여 Stub과 (FeignClient) 를 이용하여 Service 대행 인터페이스 (Proxy) 를 구현 
 
 ```
-# (app) 결제이력Service.java
+# SeatService.java
 
-package fooddelivery.external;
-
-@FeignClient(name="pay", url="http://localhost:8082")//, fallback = 결제이력ServiceFallback.class)
-public interface 결제이력Service {
-
-    @RequestMapping(method= RequestMethod.POST, path="/결제이력s")
-    public void 결제(@RequestBody 결제이력 pay);
-
+@FeignClient(name = "seatmanagement", url = "http://seatmanagement:8080")
+public interface SeatService {
+    /// reserveSeat
+    @RequestMapping(method = RequestMethod.POST, path = "/reserveSeat")
+    public void reserveSeat(@RequestBody Seat seat);
+    
+    
 }
 ```
 
-- 주문을 받은 직후(@PostPersist) 결제를 요청하도록 처리
+- 좌석예약을 받은 직후(@PostPersist) 결제를 요청하도록 처리
 ```
-# Order.java (Entity)
+# Payment.java (Entity)
 
     @PostPersist
-    public void onPostPersist(){
+    public void onPostPersist() {
+        Approved approved = new Approved();
+        BeanUtils.copyProperties(this, approved);
+        approved.setStatus("approved");
+        approved.publishAfterCommit();
 
-        fooddelivery.external.결제이력 pay = new fooddelivery.external.결제이력();
-        pay.setOrderId(getOrderId());
-        
-        Application.applicationContext.getBean(fooddelivery.external.결제이력Service.class)
-                .결제(pay);
+        // Following code causes dependency to external APIs
+        // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
+
+        moviereservation.external.Seat seat = new moviereservation.external.Seat();
+        // mappings goes here
+        seat.setReservationId(this.reservationId);
+        seat.setSeatQty(1L);
+        PaymentApplication.applicationContext.getBean(moviereservation.external.SeatService.class).reserveSeat(seat);
+
     }
 ```
 
@@ -144,19 +152,18 @@ public interface 결제이력Service {
 
 
 ```
-# 결제 (pay) 서비스를 잠시 내려놓음 (ctrl+c)
+# 좌석관리 (seatmanagement) 서비스를 잠시 내려놓음 (ctrl+c)
 
 #주문처리
-http localhost:8081/orders item=통닭 storeId=1   #Fail
-http localhost:8081/orders item=피자 storeId=2   #Fail
+http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/reservations movieName=겨울왕국 customerName=문상우   #Fail
+http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/reservations movieName=어벤져스 customerName=로다주   #Fail
 
 #결제서비스 재기동
-cd 결제
-mvn spring-boot:run
+seatmanagement deploy 재배포
 
 #주문처리
-http localhost:8081/orders item=통닭 storeId=1   #Success
-http localhost:8081/orders item=피자 storeId=2   #Success
+http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/reservations movieName=겨울왕국 customerName=문상우   #Success
+http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/reservations movieName=어벤져스 customerName=로다주   #Success
 ```
 
 - 또한 과도한 요청시에 서비스 장애가 도미노 처럼 벌어질 수 있다. (서킷브레이커, 폴백 처리는 운영단계에서 설명한다.)
