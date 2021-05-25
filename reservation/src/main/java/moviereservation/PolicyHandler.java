@@ -13,7 +13,6 @@ public class PolicyHandler{
     @Autowired ReservationRepository reservationRepository;
 
 
-
     @StreamListener(KafkaProcessor.INPUT)
     public void whatever(@Payload String eventString){}
 

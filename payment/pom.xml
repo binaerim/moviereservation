@@ -42,6 +42,8 @@
 		</dependency>
 
 
+
+
 		<!-- kafka streams -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>

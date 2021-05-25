@@ -1,6 +1,9 @@
 package moviereservation;
 
 import javax.persistence.*;
+
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.BeanUtils;
 import java.util.List;
 import java.util.Date;
@@ -16,6 +19,13 @@ public class Reservation {
     private String customerName;
     private String reservationStatus;
 
+
+
+    @HystrixCommand(fallbackMethod = "reservationFallback",
+            commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "500"),
+                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10")
+            })
     @PostPersist
     public void onPostPersist(){
         Reserved reserved = new Reserved();
@@ -31,9 +41,13 @@ public class Reservation {
         payment.setPaymentStatus(this.reservationStatus);
 
         ReservationApplication.applicationContext.getBean(moviereservation.external.PaymentService.class)
-            .pay(payment);
+                .pay(payment);
 
+        System.out.println(payment);
+    }
 
+    public String reservationFallback(){
+        return "접속자가 많아 기다리셔야 합니다";
     }
 
     @PostUpdate
@@ -41,8 +55,6 @@ public class Reservation {
         Cancelled cancelled = new Cancelled();
         BeanUtils.copyProperties(this, cancelled);
         cancelled.publishAfterCommit();
-
-
     }
 
 

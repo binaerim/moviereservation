@@ -7,6 +7,7 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 
+@EnableHysterix
 @SpringBootApplication
 @EnableBinding(KafkaProcessor.class)
 @EnableFeignClients
