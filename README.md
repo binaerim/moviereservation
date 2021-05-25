@@ -268,7 +268,7 @@ source build, dockering에서 필요한 경로를 아래와 같이 개별 프로
 
 
 
-## 동기식 호출 / 서킷 브레이킹 / 장애격리
+# 동기식 호출 / 서킷 브레이킹 / 장애격리
 
 * 서킷 브레이킹 프레임워크의 선택: Spring Hystrix 옵션을 사용하여 구현함
 
@@ -280,16 +280,23 @@ source build, dockering에서 필요한 경로를 아래와 같이 개별 프로
 
 
    @HystrixCommand(fallbackMethod = "reservationFallback",
+   
             commandProperties = {
                     @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "500"),
+                    
                     @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10")
+                    
             })
+
 
 ```
 
 - 결제 서비스에 부하를 주지 않도록, 결제 서비스의 응답이 정상적이지 않을 경우 아래 Fallback 함수 작동
+
 - application.yml 에 설정하는 방법도 있지만,  property 가 많지 않아 설정
+
 - Command Key 의 경우 Default 함수인 onPostPersist 에서 Count
+
 
 ```
     
