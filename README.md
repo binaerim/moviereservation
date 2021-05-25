@@ -439,19 +439,14 @@ Shortest transaction:	        0.00
 
 - 결제서비스에 대한 replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 30프로를 넘어서면 replica 를 10개까지 늘려준다:
 ![1](https://user-images.githubusercontent.com/54625960/119450045-5ed4f900-bd6e-11eb-9f0d-19cf62471fe5.PNG)
-![3](https://user-images.githubusercontent.com/54625960/119450050-60062600-bd6e-11eb-89ce-e07373449ed1.PNG)
 
 - CB 에서 했던 방식대로 워크로드를 100초 동안 걸어준다.
-```
-siege -c100 -t120S -r10 --content-type "application/json" 'http://localhost:8081/orders POST {"item": "chicken"}'
-```
 - siege 의 로그를 보아도 전체적인 성공률이 높아진 것을 확인 할 수 있다. 
 ![3](https://user-images.githubusercontent.com/54625960/119450050-60062600-bd6e-11eb-89ce-e07373449ed1.PNG)
-```
+
 
 - 오토스케일이 어떻게 되고 있는지 모니터링을 걸어둔다:
 - 어느정도 시간이 흐른 후 (약 30초) 스케일 아웃이 벌어지는 것을 확인할 수 있다:
-
 ![2](https://user-images.githubusercontent.com/54625960/119450048-60062600-bd6e-11eb-8a19-cbd1ca10d010.PNG)
 
 
