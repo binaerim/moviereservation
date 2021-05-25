@@ -22,8 +22,8 @@ public class PolicyHandler {
         System.out.println("\n\n##### listener PayCancel : " + cancelled.toJson() + "\n\n");
 
         Payment payment = new Payment();
-        payment.setPaymentStatus(cancelled.getStatus());
         payment.setReservationId(cancelled.getId());
+        payment.setPaymentStatus("cancelled");
         paymentRepository.save(payment);
 
     }
