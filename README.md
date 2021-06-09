@@ -262,9 +262,10 @@ http http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazo
 
 각 구현체들은 각자의 source repository 에 구성되었고, 사용한 CI/CD 플랫폼은 AWS를 사용하였으며, pipeline build script 는 각 프로젝트 폴더 이하에 buildspec.yml 에 포함되었다.
 
-특이사항으로는 모든 프로젝트 소스를 아래와 같이 하나의 git에서 관리를 하여 편의성을 도모했으며,
+모든 MSA 프로젝트 소스를 아래와 같이 하나의 git에서 관리를 하였다
 
-![4](https://user-images.githubusercontent.com/54625960/119451488-48c83800-bd70-11eb-96c2-81c8c54ca7b3.PNG)
+![github](https://user-images.githubusercontent.com/80744169/121416822-33742000-c9a4-11eb-94f9-1402432b9d08.PNG)
+
 
 각 프로젝트별 빌드를 하기 위해 파이프라인을 아래와 같이 개별적으로 구성했습니다.
 
