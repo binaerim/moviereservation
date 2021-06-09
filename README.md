@@ -135,25 +135,24 @@ public interface PointService {
 }
 ```
 
-- 좌석예약을 받은 직후(@PostPersist) 결제를 요청하도록 처리
+- 티켓취소 직후(@PostUpdate) 포인트 적립을 요청하도록 처리
 ```
-# Payment.java (Entity)
+# Ticket.java (Entity)
 
-    @PostPersist
-    public void onPostPersist() {
-        Approved approved = new Approved();
-        BeanUtils.copyProperties(this, approved);
-        approved.setStatus("approved");
-        approved.publishAfterCommit();
+    @PostUpdate
+    public void onPostUpdate(){
 
-        // Following code causes dependency to external APIs
-        // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
+        moviereservation.external.Point point = new moviereservation.external.Point();
 
-        moviereservation.external.Seat seat = new moviereservation.external.Seat();
-        // mappings goes here
-        seat.setReservationId(this.reservationId);
-        seat.setSeatQty(1L);
-        PaymentApplication.applicationContext.getBean(moviereservation.external.SeatService.class).reserveSeat(seat);
+        point.setReservationId(this.getReservationId());
+        point.setPointStatus("적립취소");
+
+        TicketmanagementApplication.applicationContext.getBean(moviereservation.external.PointService.class)
+            .decreasePoint(point);
+
+        TicketCancelled ticketCancelled = new TicketCancelled();
+        BeanUtils.copyProperties(this, ticketCancelled);
+        ticketCancelled.publishAfterCommit();
 
     }
 ```
