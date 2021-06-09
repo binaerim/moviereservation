@@ -124,15 +124,14 @@ CMD ["python", "policy-handler.py"]
 - 결제서비스를 호출하기 위하여 Stub과 (FeignClient) 를 이용하여 Service 대행 인터페이스 (Proxy) 를 구현 
 
 ```
-# SeatService.java
+# PointService.java
 
-@FeignClient(name = "seatmanagement", url = "http://seatmanagement:8080")
-public interface SeatService {
-    /// reserveSeat
-    @RequestMapping(method = RequestMethod.POST, path = "/reserveSeat")
-    public void reserveSeat(@RequestBody Seat seat);
-    
-    
+@FeignClient(name="point", url="http://point:8080")
+public interface PointService {
+
+    @RequestMapping(method= RequestMethod.POST, path="/points")
+    public void decreasePoint(@RequestBody Point point);
+
 }
 ```
 
