@@ -72,10 +72,13 @@ mvn spring-boot:run
 
 ```
 # reservation 서비스의 예매처리
-http POST http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/reservations customerName="홍길동" movieName="사탄의인형3" reservationStatus="예매완료"
+http POST http://aa25f6d4a5f3849bdb90146293c1115f-80937499.ap-northeast-2.elb.amazonaws.com/reservations customerName="홍길동" movieName="사탄의인형3" reservationStatus="예매완료"
 
 # payment 서비스의 결제확인
-http GET http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/payments
+http GET http://aa25f6d4a5f3849bdb90146293c1115f-80937499.ap-northeast-2.elb.amazonaws.com/payments
+
+# myPoint 확인 (개별 과제 추가)
+http GET http://aa25f6d4a5f3849bdb90146293c1115f-80937499.ap-northeast-2.elb.amazonaws.com/myPoints
 
 ```
 
