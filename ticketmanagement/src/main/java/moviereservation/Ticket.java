@@ -26,9 +26,19 @@ public class Ticket {
 
     @PostUpdate
     public void onPostUpdate(){
+
+        moviereservation.external.Point point = new moviereservation.external.Point();
+
+        point.setReservationId(this.getReservationId());
+        point.setPointStatus("적립취소");
+
+        TicketmanagementApplication.applicationContext.getBean(moviereservation.external.PointService.class)
+            .decreasePoint(point);
+
         TicketCancelled ticketCancelled = new TicketCancelled();
         BeanUtils.copyProperties(this, ticketCancelled);
         ticketCancelled.publishAfterCommit();
+
 
 
     }
