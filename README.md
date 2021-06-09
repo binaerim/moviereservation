@@ -276,8 +276,9 @@ http http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazo
 파이프라인은 aws codepipeline, codebuild를 활용했으며, codebuild의 경우 git의 루트 경로가 home임으로 
 source build, dockering에서 필요한 경로를 아래와 같이 개별 프로젝트의 buildspec에서 정하여 CI/CD를 구현하였습니다.
 
-![5](https://user-images.githubusercontent.com/54625960/119451490-49f96500-bd70-11eb-8dd3-1e0e84a931c4.PNG)
-![6](https://user-images.githubusercontent.com/54625960/119451491-49f96500-bd70-11eb-99eb-855fcf4d846b.PNG)
+![파이프라인1](https://user-images.githubusercontent.com/80744169/121417478-e93f6e80-c9a4-11eb-82d6-1c3c86154bf6.PNG)
+![파이프라인2](https://user-images.githubusercontent.com/80744169/121417484-eba1c880-c9a4-11eb-895d-ef2286713099.PNG)
+
 
 
 
