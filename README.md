@@ -267,9 +267,10 @@ http http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazo
 ![github](https://user-images.githubusercontent.com/80744169/121416822-33742000-c9a4-11eb-94f9-1402432b9d08.PNG)
 
 
-각 프로젝트별 빌드를 하기 위해 파이프라인을 아래와 같이 개별적으로 구성했습니다.
+각 프로젝트별 빌드를 하기 위해 파이프라인을 아래와 같이 개별적으로 구성하였다.
 
-![7](https://user-images.githubusercontent.com/54625960/119451492-4a91fb80-bd70-11eb-9166-aea28cb8213e.PNG)
+![codebuild](https://user-images.githubusercontent.com/80744169/121417164-8e0d7c00-c9a4-11eb-8121-06a658cb5443.PNG)
+
 
 
 파이프라인은 aws codepipeline, codebuild를 활용했으며, codebuild의 경우 git의 루트 경로가 home임으로 
