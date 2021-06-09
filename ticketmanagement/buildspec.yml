@@ -28,7 +28,7 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker image...
       - mvn package -f $_PROJECT_NAME -Dmaven.test.skip=true
-      - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$_PROJECT_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION ./$_PROJECT_NAME/
+      - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$_PROJECT_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION ./ticketmanagement/
   post_build:
     commands:
       - echo Pushing the Docker image...
