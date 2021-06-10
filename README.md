@@ -121,26 +121,6 @@ public interface PointService {
     }
 ```
 
-- 동기식 호출에서는 호출 시간에 따른 타임 커플링이 발생하며, 결제 시스템이 장애가 나면 주문도 못받는다는 것을 확인:
-
-
-```
-# 좌석관리 (seatmanagement) 서비스를 잠시 내려놓음 (ctrl+c)
-
-#주문처리
-http POST http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/reservations movieName=겨울왕국 customerName=문상우   #Fail
-http POST http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/reservations movieName=어벤져스 customerName=로다주   #Fail
-
-#결제서비스 재기동
-seatmanagement deploy 재배포
-
-#주문처리
-http POST http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/reservations movieName=겨울왕국 customerName=문상우   #Success
-http POST http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/reservations movieName=어벤져스 customerName=로다주   #Success
-```
-
-- 또한 과도한 요청시에 서비스 장애가 도미노 처럼 벌어질 수 있다. (서킷브레이커, 폴백 처리는 운영단계에서 설명한다.)
-
 
 
 
