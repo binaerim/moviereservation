@@ -256,3 +256,42 @@ source build, dockering에서 필요한 경로를 아래와 같이 개별 프로
 포인트 서비스에 대한 replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 30프로를 넘어서면 replica 를 10개까지 늘려준다
 
 ![오토스케일](https://user-images.githubusercontent.com/80744169/121447315-646a4a00-c9d0-11eb-94ba-a0baead5a56a.PNG)
+
+
+## Liveness Probe
+컨테이너 상태 체크
+
+* exec-liveness 설정 파일 생성 : exec_leveness.yaml
+* 파일 배포 : kubectl create –f exec-liveness.yaml
+* 파일 적용 : kubectl apply –f exec-liveness.yaml
+* 결과 확인 : watch -n 1 kubectl get all, kubectl describe pod liveness-exec
+
+![probe](https://user-images.githubusercontent.com/80744169/121484942-ab753100-ca0a-11eb-8e65-611b058d9c8c.PNG)
+
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-exec
+  labels:
+    test: liveness
+    name: liveness-exec
+spec:
+  containers:
+  - name: liveness
+    image: k8s.gcr.io/busybox
+    args:
+    - /bin/sh
+    - -c
+    - touch /tmp/healthy; sleep 30; rm -rf /tmp/healthy; sleep 600
+    livenessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 5
+      periodSeconds: 5
+
+
+```
