@@ -18,21 +18,22 @@ public class Reservation {
 
     @PostPersist
     public void onPostPersist(){
-        Reserved reserved = new Reserved();
-        BeanUtils.copyProperties(this, reserved);
-        reserved.publishAfterCommit();
-
         //Following code causes dependency to external APIs
         // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
 
         moviereservation.external.Payment payment = new moviereservation.external.Payment();
         // mappings goes here
-        payment.setReservationId(this.id);
-        payment.setPaymentStatus(this.reservationStatus);
+        payment.setReservationId(this.getId());
+        payment.setPaymentStatus(this.getReservationStatus());
 
         ReservationApplication.applicationContext.getBean(moviereservation.external.PaymentService.class)
-            .pay(payment);
+                .pay(payment);
 
+        System.out.println(payment);
+
+        Reserved reserved = new Reserved();
+        BeanUtils.copyProperties(this, reserved);
+        reserved.publishAfterCommit();
 
     }
 
