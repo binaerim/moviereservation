@@ -90,7 +90,7 @@ http GET http://aa25f6d4a5f3849bdb90146293c1115f-80937499.ap-northeast-2.elb.ama
 ```
 # PointService.java
 
-@FeignClient(name="point", url="http://point:8080")
+@FeignClient(name="point", url="http://user02-point:8080")
 public interface PointService {
 
     @RequestMapping(method= RequestMethod.POST, path="/points")
