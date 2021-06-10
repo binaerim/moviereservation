@@ -181,23 +181,7 @@ public class PolicyHandler{
 
 ```
 
-# 티켓시스템을 잠시 내려놓음 
 
-#예매
-http POST http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/reservations movieName=겨울왕국 customerName=문상우   #Success
-http POST http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/reservations movieName=어벤져스 customerName=로다주   #Success
-
-#티켓관리 확인
-http http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/tickets     # 서버가 죽어있음
-
-#티켓관리 서비스 기동
-k8s에 티켓관리 deploy
-
-#티켓관리 확인
-http http://acde84ae9f71a41a5962df4b3fbe9e34-1349237753.ap-southeast-1.elb.amazonaws.com/tickets     # 기예매된 서비스가 저장되는지 
-```
-
-```
 # 운영
 
 ## CI/CD 설정
