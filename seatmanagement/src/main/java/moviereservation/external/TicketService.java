@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name="ticketmanagement", url="http://ticketmanagement:8080")
+@FeignClient(name="ticketmanagement", url="http://user02-ticketmanagement:8080")
 public interface TicketService {
 
     @RequestMapping(method = RequestMethod.POST, path = "/cancelTicket")
