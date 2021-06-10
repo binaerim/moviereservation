@@ -24,8 +24,6 @@ public class PolicyHandler{
         point.setId(ticketReserved.getId());
         point.setReservationId(ticketReserved.getReservationId());
         point.setPointStatus("적립");
-        point.setPoint(point.getPoint() + 1);
-
 
         //Point pldpoint = new Point();
         //long lpoint = pointRepository.findByReservationId(ticketReserved.getReservationId()); //Integer.parseInt(request.getParameter("seatno"));
