@@ -59,23 +59,23 @@ spring:
           predicates:
             - Path=/payments/**
         - id: seatmanagement
-          uri: http://seatmanagement:8080
+          uri: http://user02-seatmanagement:8080
           predicates:
             - Path=/seats/**, /reserveSeat/**, /cancelReserveSeat/**
         - id: ticketmanagement
-          uri: http://ticketmanagement:8080
+          uri: http://user02-ticketmanagement:8080
           predicates:
             - Path=/tickets/**, /cancelTicket/**
         - id: mypage
-          uri: http://mypage:8080
+          uri: http://user02-mypage:8080
           predicates:
             - Path= /myPages/**
         - id: point
-          uri: http://point:8080
+          uri: http://user02-point:8080
           predicates:
             - Path=/points/**, /decreasePoint/**
         - id: mypoint
-          uri: http://mypoint:8080
+          uri: http://user02-mypoint:8080
           predicates:
             - Path= /myPoints/**
       globalcors:
