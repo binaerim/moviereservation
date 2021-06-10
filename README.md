@@ -209,44 +209,33 @@ source build, dockering에서 필요한 경로를 아래와 같이 개별 프로
 
 
 
-# 동기식 호출 / 서킷 브레이킹 / 장애격리
+# 동기식 호출
 
-* 서킷 브레이킹 프레임워크의 선택: Spring Hystrix 옵션을 사용하여 구현함
-
-시나리오는 예약(Reservation)-->결제(pay) 시의 연결을 RESTful Request/Response 로 연동하여 구현이 되어있고, 결제 요청이 과도할 경우 CB 를 통하여 장애격리.
-
-- Hystrix 를 설정:  요청처리 쓰레드에서 1초 미만, 요청 실패율이 10ㅃ% 를 넘어갈 경우 CB 작동하여 접속자가 많다는 메세지 발송
-
-```
-### (Reservation)Reservation.java
-
-
-   @HystrixCommand(fallbackMethod = "reservationFallback",
-   
-            commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "500"),
-                    
-                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "10")
-                    
-            })
-
+* 티겟예약이 취소되면 포인트 적립을 동기 호출 한다
 
 
 ```
-
-- 결제 서비스에 부하를 주지 않도록, 결제 서비스의 응답이 정상적이지 않을 경우 아래 Fallback 함수 작동
-
-- application.yml 에 설정하는 방법도 있지만,  property 가 많지 않아 설정
-
-- Command Key 의 경우 Default 함수인 onPostPersist 에서 Count
+### Ticket.java
 
 
-```
-    
-    public String reservationFallback(){
-        return "접속자가 많아 기다리셔야 합니다";
+@PostUpdate
+    public void onPostUpdate(){
+
+        moviereservation.external.Point point = new moviereservation.external.Point();
+
+        point.setReservationId(this.getReservationId());
+        point.setPointStatus("적립취소");
+
+        TicketmanagementApplication.applicationContext.getBean(moviereservation.external.PointService.class)
+            .decreasePoint(point);
+
+        TicketCancelled ticketCancelled = new TicketCancelled();
+        BeanUtils.copyProperties(this, ticketCancelled);
+        ticketCancelled.publishAfterCommit();
+
+
+
     }
-
 
 
 ```
