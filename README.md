@@ -147,32 +147,37 @@ public class Seat {
 
 }
 ```
-- 티켓관리에서는 이벤트에 대해서 이를 수신하여 자신의 정책을 처리하도록 PolicyHandler 를 구현한다:
+- 포인트에서는 이벤트에 대해서 이를 수신하여 자신의 정책을 처리하도록 PolicyHandler 를 구현한다:
 
 ```
-package fooddelivery;
-
-...
-
 @Service
 public class PolicyHandler{
+    @Autowired PointRepository pointRepository;
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void wheneverSeatAssigned_Ticket(@Payload SeatAssigned seatAssigned){
+    public void wheneverTicketReserved_IncreasePoint(@Payload TicketReserved ticketReserved){
 
-        if(!seatAssigned.validate()) return;
+        if(!ticketReserved.validate()) return;
 
-        System.out.println("\n\n##### listener Ticket : " + seatAssigned.toJson() + "\n\n");
+        System.out.println("\n\n##### listener IncreasePoint : " + ticketReserved.toJson() + "\n\n");
 
         // Sample Logic //
-        Ticket ticket = new Ticket();
-        ticket.setReservationId(seatAssigned.getReservationId());
-        ticket.setTicketStatus("발급");
-        ticketRepository.save(ticket);
+        Point point = new Point();
+        point.setId(ticketReserved.getId());
+        point.setReservationId(ticketReserved.getReservationId());
+        point.setPointStatus("적립");
+
+        if(pointRepository.findByReservationId(ticketReserved.getReservationId()) != null) {
+            Integer n = ticketReserved.getReservationId().intValue();
+            point.setPoint(n+1);
+            
+        } else {
+            point.setPoint(1);
+        }
+
+        pointRepository.save(point);
             
     }
-
-}
 
 ```
 실제 구현을 하자면, 카톡 등으로 점주는 노티를 받고, 요리를 마친후, 주문 상태를 UI에 입력할테니, 우선 주문정보를 DB에 받아놓은 후, 이후 처리는 해당 Aggregate 내에서 하면 되겠다.:
