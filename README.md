@@ -57,9 +57,6 @@ mvn spring-boot:run
 cd ticketmanagement
 mvn spring-boot:run  
 
-cd mypage
-python policy-handler.py
-
 cd point (개별 과제 추가)
 mvn spring-boot:run
 
