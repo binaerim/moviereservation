@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    _PROJECT_NAME: "ticketmanagement"
+    _PROJECT_NAME: "user02-ticketmanagement"
 
 phases:
   install:
