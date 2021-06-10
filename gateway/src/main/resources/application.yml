@@ -50,8 +50,8 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: user02-reservations
-          uri: http://user02-reservations:8080
+        - id: reservations
+          uri: http://reservations:8080
           predicates:
             - Path=/reservations/**
         - id: payment
