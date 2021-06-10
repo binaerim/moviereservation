@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    _PROJECT_NAME: "user02-seatmanagement"
+    _PROJECT_NAME: "seatmanagement"
 
 phases:
   install:
