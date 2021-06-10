@@ -287,7 +287,7 @@ source build, dockering에서 필요한 경로를 아래와 같이 개별 프로
 ```
 
 
-### 오토스케일 아웃
+## 오토스케일 아웃
 포인트 서비스에 대한 replica 를 동적으로 늘려주도록 HPA 를 설정한다. 설정은 CPU 사용량이 30프로를 넘어서면 replica 를 10개까지 늘려준다
 
 ![오토스케일](https://user-images.githubusercontent.com/80744169/121447315-646a4a00-c9d0-11eb-94ba-a0baead5a56a.PNG)
